@@ -16,8 +16,12 @@ LABEL maintainer="dwakeman@us.ibm.com"
 
 COPY dist /usr/share/nginx/html
 
+RUN mkdir /tmp/nginx
+RUN mkdir /tmp/nginx/log
+
+
 # support running as arbitrary user which belogs to the root group
-RUN chmod g+rwx /var/cache/nginx /var/run /var/log/nginx
+RUN chmod g+rwx /var/cache/nginx /var/run /var/log/nginx /tmp/nginx /tmp/nginx/log
 
 # users are not allowed to listen on priviliged ports
 RUN sed -i.bak 's/listen\(.*\)80;/listen 8080;/' /etc/nginx/conf.d/default.conf
@@ -27,4 +31,4 @@ EXPOSE 8080
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Define command to run the application when the container starts
-#CMD ["nginx", "-g", "daemon off"]
+CMD ["nginx", "-g", "daemon off;"]
